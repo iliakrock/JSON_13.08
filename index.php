@@ -1,19 +1,44 @@
 <?php
 
-require_once "functions.php";
+$deck = [];
 
-$action = $_GET['action'] ?? 'main';
+function generateDeck() {
+    global $deck;
 
-switch ($action) {
-    case "create":
-        if (empty($_POST['name']) || empty($_POST['phone'])) {
-            die("Name and phone should not be empty");
+    $cards = [6,7,8,9,10,'J','Q', 'K', 'A'];
+    $signs = ['♡', '♧', '♢', '♤'];
+    foreach ($cards as $card) {
+        foreach ($signs as $sign) {
+            $deck[] = $card . $sign;
         }
-        createContact($_POST['name'], $_POST['phone']);
-        break;
-    case "main":
-    default:
-        showTableForm();
-        showContactBook();
-        break;
+    }
+
+    shuffle($deck);
 }
+
+function getNCards(int $numberOfCardsToGive =6) {
+    global $deck;
+    $hand = [];
+
+    $cards = [];
+
+    if ($numberOfCardsToGive > count($deck)) {
+        $numberOfCardsToGive = count($deck);
+    }
+
+    for ($i = 0; $i < $numberOfCardsToGive; $i++) {
+        $card = array_shift($deck);
+        $hand[] = $card;
+    }
+    return $hand;
+}
+
+generateDeck();
+
+print_r($deck);
+$player1 = getNCards(5);
+$player2 = getNCards(5);
+
+print_r($deck);
+print_r($player1);
+print_r($player2);
